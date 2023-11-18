@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import React from 'react'
+
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -8,12 +10,7 @@ function Home() {
 
   return (
     <>
-      <button onClick={toggleAccordion} className="text-blue-500 hover:underline">
-        Toggle Accordion
-      </button>
-      <div className={`overflow-hidden transition-height w-50 duration-500 ${isOpen ? 'bg-blue-500' : 'bg-red-500'}`}>
-        Accordion content goes here
-      </div>
+      
     </>
   );
 }
