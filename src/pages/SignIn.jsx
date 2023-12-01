@@ -5,6 +5,7 @@ import {
   AiFillEyeInvisible,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 function SignIn() {
   const [showPassword, setShowPassword] =
@@ -99,6 +100,18 @@ function SignIn() {
                 </Link>
               </p>
             </div>
+            <button
+              className="active:bg-blue-900 mt-6 w-full my-3 p-3 font-semibold uppercase shadow-md rounded-md text-xl text-white bg-blue-700 hover:bg-blue-800 transition duration-150 ease-in-out"
+              type="submit"
+            >
+              Sign In
+            </button>
+            <div className="flex items-center my-2 before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300">
+              <span className="px-4 text-gray-500">
+                OR
+              </span>
+            </div>
+            <OAuth />
           </form>
         </div>
       </div>
