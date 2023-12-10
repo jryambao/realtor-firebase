@@ -6,6 +6,11 @@ import {
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+// import { db } from "../firebase";
 
 function SignUp() {
   const [showPassword, setShowPassword] =
@@ -23,6 +28,24 @@ function SignUp() {
     }));
   };
 
+  const onSubmit = async () => {
+    event.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+      const user = userCredential.user;
+
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const { name, email, password } = formData;
   return (
     <>
@@ -38,7 +61,7 @@ function SignUp() {
           />
         </div>
         <div className="md:w-[67%] lg:w-[40%] w-full mx-12">
-          <form className="">
+          <form className="" onSubmit={onSubmit}>
             <input
               className="transition ease-in-out w-full my-3 p-3 rounded-md text-xl text-gray-700 bg-white border-gray-300"
               type="text"

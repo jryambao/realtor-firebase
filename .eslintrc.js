@@ -5,7 +5,11 @@ module.exports = {
   },
   extends: [
     "google",
+    "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:prettier/recommended",
     "prettier",
   ],
   overrides: [
@@ -23,10 +27,10 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
+
   plugins: ["react"],
   rules: {
     "require-jsdoc": "off",
     "react/react-in-jsx-scope": "off",
   },
 };
-
