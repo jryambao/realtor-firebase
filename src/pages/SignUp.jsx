@@ -6,19 +6,6 @@ import {
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import OAuth from "../components/OAuth";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { db } from "../firebase";
-import {
-  serverTimestamp,
-  setDoc,
-  doc,
-} from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 
 function SignUp() {
   const [showPassword, setShowPassword] =
@@ -36,39 +23,6 @@ function SignUp() {
       ...prevState,
       [e.target.id]: e.target.value,
     }));
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const auth = getAuth();
-      const { email, password, name } = formData;
-      const userCredential =
-        await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-      updateProfile(auth.currentUser, {
-        displayName: name,
-      });
-      const user = userCredential.user;
-      const formDataCopy = { ...formData };
-      delete formDataCopy.password;
-      formDataCopy.timestamp = serverTimestamp();
-
-      await setDoc(
-        doc(db, "users", user.uid),
-        formDataCopy
-      );
-      toast.success("Sign up successful");
-    } catch (error) {
-      toast.error("Error signing up");
-    }
-  };
-  const closeModalAndNavigate = () => {
-    setShowSuccessModal(false);
-    navigate("/"); // Navigate after closing the modal
   };
 
   const { name, email, password } = formData;
