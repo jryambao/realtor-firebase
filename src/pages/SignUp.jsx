@@ -66,10 +66,6 @@ function SignUp() {
       toast.error("Error signing up");
     }
   };
-  const closeModalAndNavigate = () => {
-    setShowSuccessModal(false);
-    navigate("/"); // Navigate after closing the modal
-  };
 
   const { name, email, password } = formData;
   return (
