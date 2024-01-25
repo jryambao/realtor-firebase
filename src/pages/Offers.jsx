@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
 function Offers() {
   return (
     <>
-    <div>Offer</div>
+      <div>Offer</div>
     </>
-  )
+  );
 }
 
-export default Offers
+export default Offers;
