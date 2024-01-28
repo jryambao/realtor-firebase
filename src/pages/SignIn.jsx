@@ -6,7 +6,12 @@ import {
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import OAuth from "../components/OAuth";
-
+import {
+  signInWithEmailAndPassword,
+  getAuth,
+} from "firebase/auth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 function SignIn() {
   const [showPassword, setShowPassword] =
     useState(false);
@@ -15,11 +20,34 @@ function SignIn() {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+      const user = userCredential.user;
+      console.log(user);
+
+      if (user) {
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error("Bad User Credentials");
+    }
   };
 
   const { email, password } = formData;
@@ -37,7 +65,7 @@ function SignIn() {
           />
         </div>
         <div className="md:w-[67%] lg:w-[40%] w-full mx-12">
-          <form className="">
+          <form onSubmit={onSubmit} className="">
             <input
               className="transition ease-in-out w-full my-3 p-3 rounded-md text-xl text-gray-700 bg-white border-gray-300"
               type="email"
