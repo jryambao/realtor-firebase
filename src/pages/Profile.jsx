@@ -4,6 +4,15 @@ import { Link } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {
+  updateProfile,
+  updateEmail,
+} from "firebase/auth";
+import {
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
 function Profile() {
   const auth = getAuth();
   const navigate = useNavigate();
@@ -11,13 +20,51 @@ function Profile() {
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
   });
+  const [changeDetail, setChangeDetail] =
+    useState(false);
 
   function onLogout() {
     auth.signOut();
     navigate("/sign-in");
   }
+  function onChange(e) {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.value,
+    }));
+  }
 
-  const { name, email, password } = formData;
+  async function onSubmit() {
+    try {
+      if (auth.currentUser.displayName !== name) {
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+      }
+      if (auth.currentUser.email !== email) {
+        updateEmail(auth.currentUser, email);
+      }
+
+      const docRef = doc(
+        db,
+        "users",
+        auth.currentUser.uid
+      );
+      await updateDoc(docRef, {
+        name,
+        email,
+      });
+
+      toast.success("Profile updated");
+      navigate("/");
+    } catch (error) {
+      toast.error(
+        "Could not update profile details"
+      );
+    }
+  }
+
+  const { name, email } = formData;
 
   return (
     <>
@@ -30,34 +77,43 @@ function Profile() {
             <input
               type="text"
               id="name"
-              className="block border border-grey-light w-full p-3 rounded mb-4 text-xl"
+              className={`block border border-grey-light w-full p-3 rounded mb-4 text-xl ${
+                changeDetail &&
+                "bg-red-200 focus:bg-red-200"
+              }`}
               name="name"
               value={name}
-              placeholder={name}
-              disabled
+              disabled={!changeDetail}
+              onChange={onChange}
             />
             <input
               type="email"
               id="email"
-              className="block border border-grey-light w-full p-3 rounded mb-4 text-xl"
+              className={`block border border-grey-light w-full p-3 rounded mb-4 text-xl ${
+                changeDetail &&
+                "bg-red-200 focus:bg-red-200"
+              }`}
               name="email"
               value={email}
-              placeholder={email}
-              disabled
+              disabled={!changeDetail}
+              onChange={onChange}
             />
-            <input
-              type="password"
-              id="password"
-              className="block border border-grey-light w-full p-3 rounded mb-4 text-xl"
-              name="password"
-              placeholder="Password"
-              disabled
-            />
+
             <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg mb-6">
               <p className="flex justify-start">
                 Do you want to change your name?
-                <span className="font-bold text-red-600 hover:text-red-700 transition ease-in-out duration-150 cursor-pointer ml-1">
-                  Edit
+                <span
+                  onClick={() => {
+                    changeDetail && onSubmit();
+                    setChangeDetail(
+                      (prevState) => !prevState
+                    );
+                  }}
+                  className="font-bold text-red-600 hover:text-red-700 transition ease-in-out duration-150 cursor-pointer ml-1"
+                >
+                  {changeDetail
+                    ? "Apply change"
+                    : "Edit"}
                 </span>
               </p>
               <p
