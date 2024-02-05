@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    background-color: rgb(240, 253, 244);
+body {
+  background-color: rgb(240, 253, 244);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  border-top-color: #3498db; /* Change the color as needed */
+  animation: spin 1s linear infinite;
 }
