@@ -13,6 +13,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import { FaHouse } from "react-icons/fa6";
+
 function Profile() {
   const auth = getAuth();
   const navigate = useNavigate();
@@ -130,6 +132,18 @@ function Profile() {
               Update
             </button>
           </form>
+          <button
+            className="mx-auto my-5 border-gray-500 rounded-md flex justify-center font-semibold w-1/2 bg-red-600 py-3 shadow-md hover:bg-red-700 text-white uppercase text-2xl transition duration-100 ease-in hover:shadow-lg"
+            type="submit"
+          >
+            <Link
+              className="flex items-center justify-center space-x-2"
+              to="/create-listing"
+            >
+              <FaHouse />
+              <span>Sell or Rent Your Home</span>
+            </Link>
+          </button>
         </div>
       </section>
     </>
