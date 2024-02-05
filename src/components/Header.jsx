@@ -1,17 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../assets/realtor-logo.png";
+import { useState } from "react";
 import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import {
+  getAuth,
+  onAuthStateChanged,
+} from "firebase/auth";
+
 export default function Header() {
+  const [pageState, setPageState] = useState();
+
   const location = useLocation();
   const navigate = useNavigate();
-  function pathMathRoute(route) {
+  const auth = getAuth();
+
+  // Changes the text dynamically when user is logged in
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setPageState("Profile");
+      } else {
+        setPageState("Sign In");
+      }
+    });
+  }),
+    [auth];
+
+  function pathMatchRoute(route) {
     if (route === location.pathname) {
       console.log(route);
       return true;
     }
+    return false;
   }
 
   return (
@@ -30,9 +53,10 @@ export default function Header() {
             <ul className="flex space-x-10">
               <li
                 onClick={() => navigate("/")}
-                className={`uppercase text-xl cursor-pointer py-3 font-semibold text-gray-800 border-b-[6px] border-b-transparent ${
-                  pathMathRoute("/") &&
-                  "text-black border-b-red-500"
+                className={`text-xl cursor-pointer py-3 font-semibold transition-all duration-300 ease-in-out ${
+                  pathMatchRoute("/")
+                    ? "text-black border-b-[6px] border-b-red-500"
+                    : "border-b-[6px] border-b-transparent text-gray-800"
                 }`}
               >
                 Home
@@ -41,23 +65,26 @@ export default function Header() {
                 onClick={() =>
                   navigate("/offers")
                 }
-                className={`uppercase text-xl cursor-pointer py-3 font-semibold text-gray-800 border-b-[6px] border-b-transparent ${
-                  pathMathRoute("/offers") &&
-                  "text-black border-b-red-500"
+                className={`text-xl cursor-pointer py-3 font-semibold transition-all duration-300 ease-in-out ${
+                  pathMatchRoute("/offers")
+                    ? "text-black border-b-[6px] border-b-red-500"
+                    : "border-b-[6px] border-b-transparent text-gray-800"
                 }`}
               >
                 Offers
               </li>
               <li
                 onClick={() =>
-                  navigate("/sign-in")
+                  navigate("/profile")
                 }
-                className={`uppercase text-xl cursor-pointer py-3 font-semibold text-gray-800 border-b-[6px] border-b-transparent ${
-                  pathMathRoute("/sign-in") &&
-                  "text-black border-b-red-500"
+                className={`text-xl cursor-pointer py-3 font-semibold transition-all duration-300 ease-in-out ${
+                  pathMatchRoute("/sign-in") ||
+                  pathMatchRoute("/profile")
+                    ? "text-black border-b-[6px] border-b-red-500"
+                    : "border-b-[6px] border-b-transparent text-gray-800"
                 }`}
               >
-                Sign In
+                {pageState}
               </li>
             </ul>
           </nav>
