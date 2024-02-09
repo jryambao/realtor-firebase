@@ -33,6 +33,7 @@ export default function CreateListing() {
   function onChange(e) {
     console.log("test");
   }
+
   return (
     <>
       <div className="max-w-2xl m-auto px-2">
@@ -45,10 +46,10 @@ export default function CreateListing() {
           </p>
           <div className="flex justify-center items-center space-x-6 mt-2">
             <button
-              className={`w-full hover:bg-red-600 active:bg-red-700 rounded-md bg-red-500 px-24 py-2 text-white uppercase font-semibold txt-xl shadow-lg ${
+              className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md bg-slate-500 px-24 py-2 uppercase font-semibold txt-xl shadow-lg ${
                 type === "rent"
-                  ? "bg-slate-500"
-                  : "bg-red-500"
+                  ? "bg-white text-black hover:text-white"
+                  : "bg-slate-500 text-white"
               }`}
               type="button"
               id="type"
@@ -58,10 +59,10 @@ export default function CreateListing() {
               Sell
             </button>
             <button
-              className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 text-white uppercase font-semibold txt-xl shadow-lg ${
+              className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2  uppercase font-semibold txt-xl shadow-lg ${
                 type === "sale"
-                  ? "bg-slate-500"
-                  : "bg-red-500"
+                  ? "bg-white text-black hover:text-white"
+                  : "bg-slate-500 text-white"
               }`}
               type="button"
               id="type"
@@ -125,10 +126,10 @@ export default function CreateListing() {
             </p>
             <div className="flex justify-center items-center space-x-6 mt-2">
               <button
-                className={`w-full hover:bg-red-600 active:bg-red-700 rounded-md bg-red-500 px-24 py-2 text-white uppercase font-semibold txt-xl shadow-lg ${
+                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md bg-slate-500 px-24 py-2 uppercase font-semibold  shadow-lg ${
                   !parking
-                    ? "bg-slate-500"
-                    : "bg-red-500"
+                    ? "bg-white text-black hover:text-white"
+                    : "bg-slate-500 text-white"
                 }`}
                 type="button"
                 id="parking"
@@ -138,10 +139,10 @@ export default function CreateListing() {
                 Yes
               </button>
               <button
-                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 text-white uppercase font-semibold txt-xl shadow-lg ${
+                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 uppercase font-semibold shadow-lg ${
                   parking
-                    ? "bg-slate-500"
-                    : "bg-red-500"
+                    ? "bg-white text-black hover:text-white"
+                    : "bg-slate-500 text-white"
                 }`}
                 type="button"
                 id="parking"
@@ -159,10 +160,10 @@ export default function CreateListing() {
             </p>
             <div className="flex justify-center items-center space-x-6 mt-2">
               <button
-                className={`w-full hover:bg-red-600 active:bg-red-700 rounded-md bg-red-500 px-24 py-2 text-white uppercase font-semibold txt-xl shadow-lg ${
+                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md bg-slate-500 px-24 py-2 uppercase font-semibold  shadow-lg ${
                   !furnished
-                    ? "bg-slate-500"
-                    : "bg-red-500"
+                    ? "bg-white text-black hover:text-white"
+                    : "bg-slate-500 text-white"
                 }`}
                 type="button"
                 id="furnished"
@@ -172,10 +173,10 @@ export default function CreateListing() {
                 Yes
               </button>
               <button
-                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 text-white uppercase font-semibold txt-xl shadow-lg ${
+                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 uppercase font-semibold  shadow-lg ${
                   furnished
-                    ? "bg-slate-500"
-                    : "bg-red-500"
+                    ? "bg-white text-black hover:text-white"
+                    : "bg-slate-500 text-white"
                 }`}
                 type="button"
                 id="furnished"
@@ -218,10 +219,10 @@ export default function CreateListing() {
             </p>
             <div className="flex justify-center items-center space-x-6 mt-2">
               <button
-                className={`w-full hover:bg-red-600 active:bg-red-700 rounded-md bg-red-500 px-24 py-2 text-white uppercase font-semibold txt-xl shadow-lg ${
+                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md bg-slate-500 px-24 py-2 uppercase font-semibold txt-xl shadow-lg ${
                   !offer
-                    ? "bg-slate-500"
-                    : "bg-red-500"
+                    ? "bg-white text-black hover:text-white"
+                    : "bg-slate-500 text-white"
                 }`}
                 type="button"
                 id="furnished"
@@ -231,10 +232,10 @@ export default function CreateListing() {
                 Yes
               </button>
               <button
-                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 text-white uppercase font-semibold txt-xl shadow-lg ${
+                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 uppercase font-semibold txt-xl shadow-lg ${
                   offer
-                    ? "bg-slate-500"
-                    : "bg-red-500"
+                    ? "bg-white text-black hover:text-white"
+                    : "bg-slate-500 text-white"
                 }`}
                 type="button"
                 id="offer"
@@ -281,8 +282,35 @@ export default function CreateListing() {
             onChange={onChange}
             min="30"
             max="9000"
-            required
+            required={offer}
           />
+          <div className="flex justify-start space-y-1 flex-col mb-6">
+            <p className="mt-3 text-lg text-start font-semibold">
+              Images
+            </p>
+            <span className="text-gray-600 text-sm">
+              The first image will be the cover
+              (max 6)
+            </span>
+            <input
+              className="focus:bg-white focus:border-slate-500 w-full px-3 py-2 bg-white border-gray-600 rounded-md border-1 shadow-md transition duration-150 ease-in-out"
+              type="file"
+              onChange={onChange}
+              id="images"
+              multiple
+              min={1}
+              max={6}
+              accept=".jpg, .png, .jpeg"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="mb-6 w-full text-white hover:bg-slate-600 active:bg-slate-700 rounded-md bg-red-500 px-24 py-2 uppercase font-semibold text-lg shadow-lg transition duration-150 ease-in-out"
+          >
+            Create Listing
+          </button>
         </form>
       </div>
     </>
