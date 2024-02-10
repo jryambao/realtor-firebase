@@ -53,9 +53,14 @@ function App() {
             element={<Offers />}
           />
           <Route
-            path="/create-listing"
-            element={<CreateListing />}
-          />
+            path="create-listing"
+            element={<PrivateRoute />}
+          >
+            <Route
+              path="/create-listing"
+              element={<CreateListing />}
+            />
+          </Route>
         </Routes>
       </Router>
       <ToastContainer

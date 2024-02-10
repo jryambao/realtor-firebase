@@ -4,16 +4,15 @@ export default function CreateListing() {
   const [formData, setFormData] = useState({
     type: "rent",
     name: "",
-    bedrooms: "1",
-    bathrooms: "1",
+    bedrooms: 1,
+    bathrooms: 1,
     parking: false,
     furnished: false,
     address: "",
     description: "",
     offer: false,
-    regularPrice: "1",
-    discountedPrice: "1",
-    images: [],
+    regularPrice: 1,
+    discountedPrice: 1,
   });
   const {
     type,
@@ -27,11 +26,31 @@ export default function CreateListing() {
     offer,
     regularPrice,
     discountedPrice,
-    images,
   } = formData;
 
   function onChange(e) {
-    console.log("test");
+    let boolean = null;
+    if (e.target.value === "true") {
+      boolean = true;
+    }
+    if (e.target.value === "false") {
+      boolean = false;
+    }
+    // Files
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files,
+      }));
+    }
+
+    // Text/Booleans/Numbers
+    if (!e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: boolean ?? e.target.value,
+      }));
+    }
   }
 
   return (
@@ -53,7 +72,7 @@ export default function CreateListing() {
               }`}
               type="button"
               id="type"
-              value={type}
+              value="sale"
               onClick={onChange}
             >
               Sell
@@ -66,7 +85,7 @@ export default function CreateListing() {
               }`}
               type="button"
               id="type"
-              value={type}
+              value="rent"
               onClick={onChange}
             >
               Rent
@@ -95,7 +114,7 @@ export default function CreateListing() {
                 className="w-full text-xl text-gray-600 px-3 py-2 bg-white border border-gray-700 rounded-md transition duration-150 ease-in-out focus:text-gray-900 focus:bg-white focus:border-slate-600"
                 type="number"
                 value={bedrooms}
-                id="bed"
+                id="bedrooms"
                 onChange={onChange}
                 min="1"
                 max="50"
@@ -111,7 +130,7 @@ export default function CreateListing() {
                 className="w-full text-xl text-gray-600 px-3 py-2 bg-white border border-gray-700 rounded-md transition duration-150 ease-in-out focus:text-gray-900 focus:bg-white focus:border-slate-600"
                 type="number"
                 value={bathrooms}
-                id="baths"
+                id="bathrooms"
                 onChange={onChange}
                 min="1"
                 max="50"
@@ -133,7 +152,7 @@ export default function CreateListing() {
                 }`}
                 type="button"
                 id="parking"
-                value={parking}
+                value={true}
                 onClick={onChange}
               >
                 Yes
@@ -146,7 +165,7 @@ export default function CreateListing() {
                 }`}
                 type="button"
                 id="parking"
-                value={parking}
+                value={false}
                 onClick={onChange}
               >
                 No
@@ -167,7 +186,7 @@ export default function CreateListing() {
                 }`}
                 type="button"
                 id="furnished"
-                value={furnished}
+                value={true}
                 onClick={onChange}
               >
                 Yes
@@ -180,7 +199,7 @@ export default function CreateListing() {
                 }`}
                 type="button"
                 id="furnished"
-                value={furnished}
+                value={false}
                 onClick={onChange}
               >
                 No
@@ -219,27 +238,27 @@ export default function CreateListing() {
             </p>
             <div className="flex justify-center items-center space-x-6 mt-2">
               <button
-                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md bg-slate-500 px-24 py-2 uppercase font-semibold txt-xl shadow-lg ${
+                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 uppercase font-semibold shadow-lg ${
                   !offer
                     ? "bg-white text-black hover:text-white"
                     : "bg-slate-500 text-white"
                 }`}
                 type="button"
-                id="furnished"
-                value={offer}
+                id="offer"
+                value={true}
                 onClick={onChange}
               >
                 Yes
               </button>
               <button
-                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 uppercase font-semibold txt-xl shadow-lg ${
+                className={`w-full hover:bg-slate-600 active:bg-slate-700 rounded-md px-24 py-2 uppercase font-semibold shadow-lg ${
                   offer
                     ? "bg-white text-black hover:text-white"
                     : "bg-slate-500 text-white"
                 }`}
                 type="button"
                 id="offer"
-                value={offer}
+                value={false}
                 onClick={onChange}
               >
                 No
@@ -255,9 +274,9 @@ export default function CreateListing() {
                 className="w-1/2 text-xl text-gray-600 px-3 py-2 bg-white border border-gray-700 rounded-md transition duration-150 ease-in-out focus:text-gray-900 focus:bg-white focus:border-slate-600"
                 type="number"
                 value={regularPrice}
-                id="regularprice"
+                id="regularPrice"
                 onChange={onChange}
-                min="69"
+                min="1"
                 max="50000000"
                 required
               />
@@ -270,20 +289,23 @@ export default function CreateListing() {
               )}
             </div>
           </div>
-
-          <p className="mt-3 text-lg text-start font-semibold">
-            Discounted Price
-          </p>
-          <input
-            className="w-1/2 text-xl text-gray-600 px-3 py-2 bg-white border border-gray-700 rounded-md transition duration-150 ease-in-out focus:text-gray-900 focus:bg-white focus:border-slate-600"
-            type="number"
-            value={discountedPrice}
-            id="discountedprice"
-            onChange={onChange}
-            min="30"
-            max="9000"
-            required={offer}
-          />
+          {offer && (
+            <div>
+              <p className="mt-3 text-lg text-start font-semibold">
+                Discounted Price
+              </p>
+              <input
+                className="w-1/2 text-xl text-gray-600 px-3 py-2 bg-white border border-gray-700 rounded-md transition duration-150 ease-in-out focus:text-gray-900 focus:bg-white focus:border-slate-600"
+                type="number"
+                value={discountedPrice}
+                id="discountedPrice"
+                onChange={onChange}
+                min="1"
+                max="9000"
+                required={offer}
+              />
+            </div>
+          )}
           <div className="flex justify-start space-y-1 flex-col mb-6">
             <p className="mt-3 text-lg text-start font-semibold">
               Images
