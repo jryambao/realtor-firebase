@@ -1,6 +1,16 @@
 import React from "react";
 import { useState } from "react";
+import Spinner from "../components/Spinner";
+import { toast } from "react-toastify";
+
 export default function CreateListing() {
+  const [
+    geolocationEnabled,
+    setGeolocationEnabled,
+  ] = useState(true);
+
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     type: "rent",
     name: "",
@@ -13,6 +23,9 @@ export default function CreateListing() {
     offer: false,
     regularPrice: 1,
     discountedPrice: 1,
+    latitude: 0,
+    longitude: 0,
+    images: [],
   });
   const {
     type,
@@ -26,6 +39,9 @@ export default function CreateListing() {
     offer,
     regularPrice,
     discountedPrice,
+    latitude,
+    longitude,
+    images,
   } = formData;
 
   function onChange(e) {
@@ -52,14 +68,44 @@ export default function CreateListing() {
       }));
     }
   }
+  async function onSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    if (discountedPrice >= regularPrice) {
+      setLoading(false);
+      toast.error(
+        "Discounted price needs to be less than regular price"
+      );
+      return;
+    }
+    if (images.length > 6) {
+      toast.error("Max 6 images only");
+      setLoading(false);
+      return;
+    }
 
+    const geolocation = {};
+    let location;
+
+    if (geolocationEnabled) {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`
+      );
+      const data = await response.json();
+      console.log(data);
+    }
+  }
+
+  if (loading) {
+    return <Spinner />;
+  }
   return (
     <>
       <div className="max-w-2xl m-auto px-2">
         <h1 className="text-3xl text-center font-bold mt-5">
           Create Your Listing
         </h1>
-        <form>
+        <form onSubmit={onSubmit}>
           <p className="text-lg mt-6 text-center font-semibold">
             Sell / Rent
           </p>
@@ -218,6 +264,38 @@ export default function CreateListing() {
             onChange={onChange}
             required
           />
+          {!geolocationEnabled && (
+            <div className="flex justify-center items-center space-x-6 flex-col">
+              <div className="w-full">
+                <p className="text-lg text-start font-semibold">
+                  Latitude
+                </p>
+                <input
+                  className="w-1/2 text-xl text-gray-600 px-3 py-2 bg-white border border-gray-700 rounded-md transition duration-150 ease-in-out focus:text-gray-900 focus:bg-white focus:border-slate-600"
+                  type="number"
+                  id="latitude"
+                  value={latitude}
+                  onChange={onChange}
+                  required
+                  max="90"
+                  min="-90"
+                />
+                <p className="mt-3 text-lg text-start font-semibold">
+                  Longitude
+                </p>
+                <input
+                  className="w-1/2 text-xl text-gray-600 px-3 py-2 bg-white border border-gray-700 rounded-md transition duration-150 ease-in-out focus:text-gray-900 focus:bg-white focus:border-slate-600"
+                  type="number"
+                  id="longitude"
+                  value={longitude}
+                  onChange={onChange}
+                  required
+                  min="-180"
+                  max="180"
+                />
+              </div>
+            </div>
+          )}
 
           <p className="text-lg text-start font-semibold">
             Description
@@ -276,7 +354,7 @@ export default function CreateListing() {
                 value={regularPrice}
                 id="regularPrice"
                 onChange={onChange}
-                min="1"
+                min="50"
                 max="50000000"
                 required
               />
@@ -300,7 +378,7 @@ export default function CreateListing() {
                 value={discountedPrice}
                 id="discountedPrice"
                 onChange={onChange}
-                min="1"
+                min="0"
                 max="9000"
                 required={offer}
               />
