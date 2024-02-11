@@ -16,7 +16,9 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 export default function CreateListing() {
+  const navigate = useNavigate();
   const [
     geolocationEnabled,
     setGeolocationEnabled,
@@ -85,7 +87,7 @@ export default function CreateListing() {
   async function onSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    if (discountedPrice >= regularPrice) {
+    if (+discountedPrice >= +regularPrice) {
       setLoading(false);
       toast.error(
         "Discounted price needs to be less than regular price"
@@ -214,6 +216,10 @@ export default function CreateListing() {
     );
     setLoading(false);
     toast.success("Listing created");
+
+    navigate(
+      `/category/${formDataCopy.type}/${docRef.id}`
+    );
   }
 
   if (loading) {
@@ -475,7 +481,7 @@ export default function CreateListing() {
                 id="regularPrice"
                 onChange={onChange}
                 min="50"
-                max="50000000"
+                max="500000000"
                 required
               />
               {type === "rent" && (
@@ -499,7 +505,7 @@ export default function CreateListing() {
                 id="discountedPrice"
                 onChange={onChange}
                 min="0"
-                max="9000"
+                max="90000000"
                 required={offer}
               />
             </div>
