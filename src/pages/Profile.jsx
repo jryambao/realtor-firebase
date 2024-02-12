@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth } from "firebase/auth";
@@ -9,11 +9,18 @@ import {
   updateEmail,
 } from "firebase/auth";
 import {
+  collection,
   doc,
+  getDocs,
+  orderBy,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { FaHouse } from "react-icons/fa6";
+import { v4 as uuidv4 } from "uuid";
+import ListingItem from "../components/ListingItem";
 
 function Profile() {
   const auth = getAuth();
@@ -24,6 +31,9 @@ function Profile() {
   });
   const [changeDetail, setChangeDetail] =
     useState(false);
+
+  const [listings, getListings] = useState();
+  const [loading, setLoading] = useState(true);
 
   function onLogout() {
     auth.signOut();
@@ -67,6 +77,37 @@ function Profile() {
   }
 
   const { name, email } = formData;
+
+  useEffect(() => {
+    setLoading(true);
+    async function fetchUserListings() {
+      const listingRef = collection(
+        db,
+        "listings"
+      );
+      const q = query(
+        listingRef,
+        where(
+          "userRef",
+          "==",
+          auth.currentUser.uid
+        ),
+        orderBy("timestamp", "desc")
+      );
+
+      const querySnap = await getDocs(q);
+      const listings = [];
+      querySnap.forEach((doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data(),
+        });
+      });
+      getListings(listings);
+      setLoading(false);
+    }
+    fetchUserListings();
+  }, [auth.currentUser.uid]);
 
   return (
     <>
@@ -146,6 +187,25 @@ function Profile() {
           </button>
         </div>
       </section>
+
+      <div className="max-w-6xl px-3 mt-6 mx-auto">
+        {!loading && listings.length > 0 && (
+          <>
+            <h2 className="text-center text-2xl font-semibold mt-6">
+              My Listings
+            </h2>
+            <ul>
+              {listings.map((listing) => (
+                <ListingItem
+                  key={listing.id}
+                  id={listing.id}
+                  listing={listing.data}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     </>
   );
 }
