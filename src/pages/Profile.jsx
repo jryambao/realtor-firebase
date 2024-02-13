@@ -194,7 +194,7 @@ function Profile() {
             <h2 className="text-center text-2xl font-semibold mt-6">
               My Listings
             </h2>
-            <ul>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-8 mt-6">
               {listings.map((listing) => (
                 <ListingItem
                   key={listing.id}
