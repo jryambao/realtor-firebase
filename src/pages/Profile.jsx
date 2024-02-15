@@ -21,7 +21,6 @@ import { db } from "../firebase";
 import { FaHouse } from "react-icons/fa6";
 import { v4 as uuidv4 } from "uuid";
 import ListingItem from "../components/ListingItem";
-
 function Profile() {
   const auth = getAuth();
   const navigate = useNavigate();
